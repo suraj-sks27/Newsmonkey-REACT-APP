@@ -107,20 +107,6 @@ export class News extends Component {
     },
     {
       source: {
-        id: 'the-hindu',
-        name: 'The Hindu',
-      },
-      author: 'The Hindu',
-      title:
-        'Meta launches open-source AI music generation tool ‘AudioCraft’ - The Hindu',
-      description: null,
-      url: 'https://www.thehindu.com/sci-tech/technology/meta-launches-open-source-ai-music-generation-tool-audiocraft/article67153116.ece',
-      urlToImage: null,
-      publishedAt: '2023-08-03T07:00:00Z',
-      content: null,
-    },
-    {
-      source: {
         id: null,
         name: 'Jagran.com',
       },
@@ -135,20 +121,6 @@ export class News extends Component {
       publishedAt: '2023-08-03T06:43:16Z',
       content:
         'Infinix, a Chinese smartphone manufacturer, has launched the Infinix GT 10 Pro smartphone in India. The smartphone carries a transparent back with LEDs that may remind you of the newly-launched Nothi… [+2417 chars]',
-    },
-    {
-      source: {
-        id: null,
-        name: 'The Indian Express',
-      },
-      author: 'The Indian Express',
-      title:
-        'OnePlus Open reportedly delayed due to change in display supplier - The Indian Express',
-      description: null,
-      url: 'https://indianexpress.com/article/technology/mobile-tabs/oneplus-open-reportedly-delayed-due-to-change-in-display-supplier-8874142/',
-      urlToImage: null,
-      publishedAt: '2023-08-03T06:26:33Z',
-      content: null,
     },
     {
       source: {
@@ -233,20 +205,6 @@ export class News extends Component {
       publishedAt: '2023-08-03T05:13:54Z',
       content:
         'The Amazon Great Freedom Festival Sale is commencing today at 12 PM IST, exclusively for Prime members. For non-Prime members, the sale will begin from August 4 onwards. Interestingly, during this sa… [+2309 chars]',
-    },
-    {
-      source: {
-        id: null,
-        name: 'Business Standard',
-      },
-      author: 'Business Standard',
-      title:
-        'Samsung to launch Galaxy F34 5G smartphone in India on Aug 7: Details here - Business Standard',
-      description: null,
-      url: 'https://www.business-standard.com/technology/gadgets/samsung-to-launch-galaxy-f34-5g-smartphone-in-india-on-aug-7-details-here-123080300180_1.html',
-      urlToImage: null,
-      publishedAt: '2023-08-03T04:42:05Z',
-      content: null,
     },
     {
       source: {
@@ -335,7 +293,8 @@ export class News extends Component {
   //!constructor of the class
   constructor() {
     super();
-    console.log('i am a constructor from newscomponent');
+    // console.log('i am a constructor from newscomponent');
+
     //? creating state in a class based component
     this.state = {
       articles: this.articles,
@@ -349,21 +308,22 @@ export class News extends Component {
         <h1>
           <span>NewMonkey</span> - Top Headlines
         </h1>
-        <div className="row">
-          <div className="col-md-4">
-            <NewsItem
-              title="My title"
-              description="Mydesc"
-              imgUrl="https://cdn.vox-cdn.com/thumbor/vpVcVjgOLKUBbv6b55mGzUsQiRU=/0x0:2160x1440/1200x628/filters:focal(1080x720:1081x721)/cdn.vox-cdn.com/uploads/chorus_asset/file/24428734/Screen_Shot_2023_02_13_at_8.38.37_AM.jpg"
-              newsUrl="todo"
-            />
-          </div>
-          <div className="col-md-4">
-            <NewsItem title="My title" description="Mydesc" />
-          </div>
-          <div className="col-md-4">
-            <NewsItem title="My title" description="Mydesc" />
-          </div>
+        <div className="news-items">
+          {/* to hamlog yaha par eek row ke andar max 3 col hoga ,matlab har row me 3 news item hoga....ab hamlog jo state declare kiye hai constructor me usme hamlog "articles" key ke andar sara news daal diye hai array ke form me jo hai ...ab yaha par map() array method ke help se sare array items ko iterate karenge jo "articles" key ke andar hai....array element eek object hai to... object ke andar jo keys present hai usko niakl kar ham apne newsitem components ko send kar rhe hai props ke madad se*/}
+          {/* aur jo hamlog baar baar newsitem return  kar rhe uske wrapper (joki hamlog ke case me <div className="col"> hai) usko eek unique key dena hoga taki dusre item se uniquesly identify kar sake ...to hamlog news ka url de diye as a key*/}
+          {this.state.articles.map((element) => {
+            return (
+              // <div >
+              <NewsItem
+                key={element.url}
+                title={element.title}
+                description={element.description}
+                imgUrl={element.urlToImage}
+                newsUrl={element.url}
+              />
+              // </div>
+            );
+          })}
         </div>
       </div>
     );

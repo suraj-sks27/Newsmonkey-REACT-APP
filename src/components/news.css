@@ -6,3 +6,20 @@
 .container h1 span {
   color: rgb(42, 112, 191);
 }
+
+.news-items {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+
+  flex-wrap: wrap;
+}
+
+@media screen and (max-width: 769px) {
+  .news-items {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-items: center;
+  }
+}
