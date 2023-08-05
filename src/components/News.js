@@ -12,22 +12,69 @@ export class News extends Component {
     this.state = {
       articles: [],
       loading: false,
+      page: 1,
     };
   }
 
   //! component did mount to fetch the api
   async componentDidMount() {
     try {
-      let url =
-        'https://newsapi.org/v2/top-headlines?country=in&apiKey=25f15108e69741c88288ed5dd8a82b64';
+      let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=25f15108e69741c88288ed5dd8a82b64&pageSize=20`;
       let data = await fetch(url);
       let parsedData = await data.json();
 
-      this.setState({ articles: parsedData.articles });
+      this.setState({
+        articles: parsedData.articles,
+        totalResults: parsedData.totalResults,
+      });
     } catch (e) {
       console.log('Something went wrong');
     }
   }
+
+  //! Methods of this class
+  //? handlePrevious
+  handlePrevious = async () => {
+    try {
+      let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=25f15108e69741c88288ed5dd8a82b64&page=${
+        this.state.page - 1
+      }&pageSize=20`;
+      let data = await fetch(url);
+      let parsedData = await data.json();
+
+      this.setState({
+        articles: parsedData.articles,
+        page: this.state.page - 1,
+      });
+      console.log(this.state.page);
+    } catch (e) {
+      console.log('Something went wrong');
+    }
+  };
+
+  //? handleNext
+  handleNext = async () => {
+    //total results jo aa rha json file ke andar aur total no of news eek page me kitna aa rha dono ko divide kareka pata lga skte hai ki total kitna pages ho skta hai...therefore Math.ceil ka use karke greatest round off kar rhe taki ye pata lga sake ki eek api fetch me aprox kitna pages hoga...aur agar hamlog ka next page usse bada hai to next button kaam nhi karega
+
+    //example: page=1 totalpossiblePage=2....page=2 totalpossiblePage=2....page=3 totalpossiblePage=3(next button doesnt work).
+    if (this.state.page + 1 > Math.ceil(this.state.totalResults / 20)) {
+    } else {
+      try {
+        let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=25f15108e69741c88288ed5dd8a82b64&page=${
+          this.state.page + 1
+        }&pageSize=20`;
+        let data = await fetch(url);
+        let parsedData = await data.json();
+
+        this.setState({
+          articles: parsedData.articles,
+          page: this.state.page + 1,
+        });
+      } catch (e) {
+        console.log('Something went wrong');
+      }
+    }
+  };
 
   render() {
     return (
@@ -57,6 +104,24 @@ export class News extends Component {
               // </div>
             );
           })}
+        </div>
+
+        <div className="container d-flex justify-content-between mt-2 bg-dark">
+          <button
+            disabled={this.state.page <= 1}
+            type="button"
+            className="btn btn-dark"
+            onClick={this.handlePrevious}
+          >
+            &#8810; Previous
+          </button>
+          <button
+            type="button"
+            className="btn btn-dark"
+            onClick={this.handleNext}
+          >
+            Next &#8811;
+          </button>
         </div>
       </div>
     );
