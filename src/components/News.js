@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
+
 import NewsItem from './NewsItem';
-import './news.css';
 import Spinner from './Spinner';
+
+import './news.css';
 
 export class News extends Component {
   //!constructor of the class
