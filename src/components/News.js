@@ -5,7 +5,22 @@ import Spinner from './Spinner';
 
 import './news.css';
 
+import PropTypes from 'prop-types';
+
 export class News extends Component {
+  //! Proptypes in class
+  static defaultProps = {
+    country: 'in',
+    pageSize: 8,
+    category: 'general',
+  };
+
+  static propTypes = {
+    country: PropTypes.string,
+    pageSize: PropTypes.number,
+    category: PropTypes.string,
+  };
+
   //!constructor of the class
   constructor() {
     super();
@@ -22,7 +37,7 @@ export class News extends Component {
   //! component did mount to fetch the api
   async componentDidMount() {
     try {
-      let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=25f15108e69741c88288ed5dd8a82b64&pageSize=${this.props.pageSize}`;
+      let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=25f15108e69741c88288ed5dd8a82b64&pageSize=${this.props.pageSize}`;
 
       //show loading while featching data
       this.setState({ loading: true });
@@ -45,7 +60,11 @@ export class News extends Component {
   //? handlePrevious
   handlePrevious = async () => {
     try {
-      let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=25f15108e69741c88288ed5dd8a82b64&page=${
+      let url = `https://newsapi.org/v2/top-headlines?country=${
+        this.props.country
+      }&category=${
+        this.props.category
+      }&apiKey=25f15108e69741c88288ed5dd8a82b64&page=${
         this.state.page - 1
       }&pageSize=${this.props.pageSize}`;
 
@@ -69,7 +88,11 @@ export class News extends Component {
   //? handleNext
   handleNext = async () => {
     try {
-      let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=25f15108e69741c88288ed5dd8a82b64&page=${
+      let url = `https://newsapi.org/v2/top-headlines?country=${
+        this.props.country
+      }&category=${
+        this.props.category
+      }&apiKey=25f15108e69741c88288ed5dd8a82b64&page=${
         this.state.page + 1
       }&pageSize=${this.props.pageSize}`;
 
@@ -116,6 +139,9 @@ export class News extends Component {
                       : 'https://imgeng.jagran.com/images/2023/aug/Samsung%20Galaxy%20Z%20Fold%20%2051691054786770.jpg'
                   }
                   newsUrl={element.url}
+                  author={element.author}
+                  date={element.publishedAt}
+                  source={element.source.name}
                 />
               );
             })}

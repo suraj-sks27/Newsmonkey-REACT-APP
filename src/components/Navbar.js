@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 export class Navbar extends Component {
   render() {
@@ -6,9 +7,9 @@ export class Navbar extends Component {
       <>
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
           <div className="container-fluid">
-            <a className="navbar-brand" href="/">
+            <Link className="navbar-brand" to="/">
               NewsMonkey
-            </a>
+            </Link>
             <button
               className="navbar-toggler"
               type="button"
@@ -23,19 +24,55 @@ export class Navbar extends Component {
             <div className="collapse navbar-collapse" id="navbarScroll">
               <ul className="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll">
                 <li className="nav-item">
-                  <a className="nav-link active" aria-current="page" href="/">
+                  <Link className="nav-link" aria-current="page" to="/">
                     Home
-                  </a>
+                  </Link>
                 </li>
-
                 <li className="nav-item">
-                  <a
-                    className="nav-link disabled"
+                  <Link
+                    className="nav-link "
                     aria-disabled="true"
-                    href="/about"
+                    to="/business"
                   >
-                    About
-                  </a>
+                    Business
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link
+                    className="nav-link "
+                    aria-disabled="true"
+                    to="/entertainment"
+                  >
+                    Entertainment
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link " aria-disabled="true" to="/health">
+                    Health
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link
+                    className="nav-link "
+                    aria-disabled="true"
+                    to="/science"
+                  >
+                    Science
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link " aria-disabled="true" to="/sports">
+                    Sports
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link
+                    className="nav-link "
+                    aria-disabled="true"
+                    to="/technology"
+                  >
+                    Technology
+                  </Link>
                 </li>
               </ul>
             </div>
