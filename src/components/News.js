@@ -46,7 +46,6 @@ export class News extends Component {
         articles: parsedData.articles,
         page: this.state.page - 1,
       });
-      console.log(this.state.page);
     } catch (e) {
       console.log('Something went wrong');
     }
