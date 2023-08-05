@@ -56,7 +56,9 @@ export class News extends Component {
     //total results jo aa rha json file ke andar aur total no of news eek page me kitna aa rha dono ko divide kareka pata lga skte hai ki total kitna pages ho skta hai...therefore Math.ceil ka use karke greatest round off kar rhe taki ye pata lga sake ki eek api fetch me aprox kitna pages hoga...aur agar hamlog ka next page usse bada hai to next button kaam nhi karega
 
     //example: page=1 totalpossiblePage=2....page=2 totalpossiblePage=2....page=3 totalpossiblePage=3(next button doesnt work).
+
     if (this.state.page + 1 > Math.ceil(this.state.totalResults / 20)) {
+      // do nothing
     } else {
       try {
         let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=25f15108e69741c88288ed5dd8a82b64&page=${
