@@ -4,6 +4,8 @@ import Spinner from './Spinner';
 import './news.css';
 import PropTypes from 'prop-types';
 
+import InfiniteScroll from 'react-infinite-scroll-component';
+
 export class News extends Component {
   //! Proptypes in class
   static defaultProps = {
@@ -26,13 +28,13 @@ export class News extends Component {
   //!constructor of the class
   constructor(props) {
     super(props);
-    // console.log('i am a constructor from newscomponent');
 
     //? creating state in a class based component
     this.state = {
       articles: [],
       loading: false,
       page: 1,
+      totalResults: 0,
     };
 
     document.title = `${this.Capitalize(this.props.category)} - NewsMonkey`;
@@ -65,17 +67,25 @@ export class News extends Component {
     this.updateNews();
   }
 
-  //! Methods of this class
-  //? handlePrevious
-  handlePrevious = async () => {
-    this.setState({ page: this.state.page - 1 });
-    this.updateNews();
-  };
+  //! Fetchmore function to load more data on infinte scroll
+  fetchMoreData = async () => {
+    this.setState({
+      page: this.state.page + 1,
+    });
 
-  //? handleNext
-  handleNext = async () => {
-    this.setState({ page: this.state.page + 1 });
-    this.updateNews();
+    try {
+      const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=25f15108e69741c88288ed5dd8a82b64&page=${this.state.page}&pageSize=${this.props.pageSize}`;
+
+      let data = await fetch(url);
+      let parsedData = await data.json();
+
+      this.setState({
+        articles: this.state.articles.concat(parsedData.articles),
+        totalResults: parsedData.totalResults,
+      });
+    } catch (e) {
+      console.log('Something went wrong');
+    }
   };
 
   render() {
@@ -86,12 +96,19 @@ export class News extends Component {
           {this.Capitalize(this.props.category)}
         </h1>
         {this.state.loading && <Spinner />}
-        <div className="news-items">
-          {/* to hamlog yaha par eek row ke andar max 3 col hoga ,matlab har row me 3 news item hoga....ab hamlog jo state declare kiye hai constructor me usme hamlog "articles" key ke andar sara news daal diye hai array ke form me jo hai ...ab yaha par map() array method ke help se sare array items ko iterate karenge jo "articles" key ke andar hai....array element eek object hai to... object ke andar jo keys present hai usko niakl kar ham apne newsitem components ko send kar rhe hai props ke madad se*/}
-          {/* aur jo hamlog baar baar newsitem return  kar rhe uske wrapper (joki hamlog ke case me <div className="col"> hai) usko eek unique key dena hoga taki dusre item se uniquesly identify kar sake ...to hamlog news ka url de diye as a key*/}
-          {/* agar loading nhi chl rha tb props ko send karo warna wait karo loading hatne ka */}
-          {!this.state.loading &&
-            this.state.articles.map((element) => {
+
+        {/* adding infinite scroll */}
+        <InfiniteScroll
+          dataLength={this.state.articles.length}
+          next={this.fetchMoreData}
+          // style={{ display: 'flex', flexDirection: 'column-reverse' }}
+          // inverse={true}
+          hasMore={this.state.articles.length !== this.state.totalResults}
+          loader={<Spinner />}
+          scrollableTarget="scrollableDiv"
+        >
+          <div className="news-items">
+            {this.state.articles.map((element) => {
               return (
                 <NewsItem
                   key={element.url}
@@ -111,34 +128,8 @@ export class News extends Component {
                 />
               );
             })}
-        </div>
-
-        <div className="container d-flex justify-content-between mt-2 bg-sucess">
-          <button
-            disabled={this.state.page <= 1}
-            type="button"
-            className="btn btn-dark"
-            onClick={this.handlePrevious}
-          >
-            &#8810; Previous
-          </button>
-
-          {/* //total results jo aa rha json file ke andar aur total no of news eek page me kitna aa rha dono ko divide kareka pata lga skte hai ki total kitna required pages ho skta hai...therefore Math.ceil ka use karke greatest round off kar rhe taki ye pata lga sake ki eek api fetch me aprox kitna pages hoga...aur agar hamlog ka next page usse bada hai to next button kaam nhi karega
-
-          //example: page=1 totalpossiblePage=2....page=2 totalpossiblePage=2....page=3 totalpossiblePage=3(next button doesnt work). */}
-
-          <button
-            disabled={
-              this.state.page + 1 >
-              Math.ceil(this.state.totalResults / this.props.pageSize)
-            }
-            type="button"
-            className="btn btn-dark"
-            onClick={this.handleNext}
-          >
-            Next &#8811;
-          </button>
-        </div>
+          </div>
+        </InfiniteScroll>
       </div>
     );
   }
