@@ -18,9 +18,14 @@ export class News extends Component {
     category: PropTypes.string,
   };
 
+  //! Capitalize function
+  Capitalize = (str) => {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  };
+
   //!constructor of the class
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     // console.log('i am a constructor from newscomponent');
 
     //? creating state in a class based component
@@ -29,12 +34,14 @@ export class News extends Component {
       loading: false,
       page: 1,
     };
+
+    document.title = `${this.Capitalize(this.props.category)} - NewsMonkey`;
   }
 
-  //! component did mount to fetch the api
-  async componentDidMount() {
+  //! Function to update news
+  updateNews = async () => {
     try {
-      let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=25f15108e69741c88288ed5dd8a82b64&pageSize=${this.props.pageSize}`;
+      const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=25f15108e69741c88288ed5dd8a82b64&page=${this.state.page}&pageSize=${this.props.pageSize}`;
 
       //show loading while featching data
       this.setState({ loading: true });
@@ -51,70 +58,32 @@ export class News extends Component {
     } catch (e) {
       console.log('Something went wrong');
     }
+  };
+
+  //! component did mount to fetch the api
+  async componentDidMount() {
+    this.updateNews();
   }
 
   //! Methods of this class
   //? handlePrevious
   handlePrevious = async () => {
-    try {
-      let url = `https://newsapi.org/v2/top-headlines?country=${
-        this.props.country
-      }&category=${
-        this.props.category
-      }&apiKey=25f15108e69741c88288ed5dd8a82b64&page=${
-        this.state.page - 1
-      }&pageSize=${this.props.pageSize}`;
-
-      //show loading while featching data
-      this.setState({ loading: true });
-
-      let data = await fetch(url);
-      let parsedData = await data.json();
-
-      this.setState({
-        articles: parsedData.articles,
-        page: this.state.page - 1,
-        //after fetch is complete the disable the spinner
-        loading: false,
-      });
-    } catch (e) {
-      console.log('Something went wrong');
-    }
+    this.setState({ page: this.state.page - 1 });
+    this.updateNews();
   };
 
   //? handleNext
   handleNext = async () => {
-    try {
-      let url = `https://newsapi.org/v2/top-headlines?country=${
-        this.props.country
-      }&category=${
-        this.props.category
-      }&apiKey=25f15108e69741c88288ed5dd8a82b64&page=${
-        this.state.page + 1
-      }&pageSize=${this.props.pageSize}`;
-
-      //show loading while featching data
-      this.setState({ loading: true });
-
-      let data = await fetch(url);
-      let parsedData = await data.json();
-
-      this.setState({
-        articles: parsedData.articles,
-        page: this.state.page + 1,
-        //after fetch is complete the disable the spinner
-        loading: false,
-      });
-    } catch (e) {
-      console.log('Something went wrong');
-    }
+    this.setState({ page: this.state.page + 1 });
+    this.updateNews();
   };
 
   render() {
     return (
       <div className="container my-3">
         <h1>
-          <span>NewMonkey</span> - Top Headlines
+          <span>NewMonkey</span> - Top Headlines on{' '}
+          {this.Capitalize(this.props.category)}
         </h1>
         {this.state.loading && <Spinner />}
         <div className="news-items">
