@@ -43,12 +43,12 @@ export class News extends Component {
   //! Function to update news
   updateNews = async () => {
     try {
-      //running the progress bar from 0
+      //?running the progress bar from 0
       this.props.setProgress(10);
 
       const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=25f15108e69741c88288ed5dd8a82b64&page=${this.state.page}&pageSize=${this.props.pageSize}`;
 
-      //show loading while featching data
+      //?show loading while featching data
       this.setState({ loading: true });
 
       let data = await fetch(url);
@@ -57,10 +57,10 @@ export class News extends Component {
       this.setState({
         articles: parsedData.articles,
         totalResults: parsedData.totalResults,
-        //after fetch is complete the disable the spinner
+        //?after fetch is complete the disable the spinner
         loading: false,
       });
-      //running the progress bar from 0 to 100
+      //?running the progress bar from 0 to 100
       this.props.setProgress(100);
     } catch (e) {
       console.log('Something went wrong');
